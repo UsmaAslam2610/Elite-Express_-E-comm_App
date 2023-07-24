@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELITE EXPRESS - Online Grocery Store|Items</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{{url_for('static',filename='css/adminHome.css')}}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script src="http://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script>$(document).ready(function () {
+            $('#myTable').DataTable();
+        });</script>
+</head>
+
+<body style=" background-color: rgb(40, 55, 71)">
+    <div class="col-md-3 d-flex " style="background-color: rgb(27, 38, 49); width:1280px; height:60px">
+        <h1><a style="text-decoration:none" href="/adminHome"><span id="elite_logo">ELITE</span>EXPRESS</a></h1>
+    </div>
+
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar">
+            <ul class="list-unstyled components mb-5">
+                <li class="active">
+                    <a style="text-decoration:none" href="/adminHome"><span class="fa fa-dashboard mr-3 "></span>
+                        Dashboard</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a style="text-decoration:none" id="category" class="fa fa-list-alt mr-3" href="/category"
+                        role="button">
+                        Category</a>
+                </li>
+                <li>
+                    <a style="text-decoration:none" class="fa fa-list-alt mr-3" href="/items" role="button">
+                        Items</a>
+                </li>
+                <li>
+                    <a style="text-decoration:none" class="fa fa-list-alt mr-3" href="/order" role="button">
+                        Orders</a>
+                </li>
+                <li>
+                    <a style="text-decoration:none" href="/logOut"><span class="fa fa-sign-out mr-3"></span> Sign
+                        Out</a>
+                </li>
+            </ul>
+        </nav>
+        <div style="width: 80%; background-color:rgba(80, 100, 119, 0.664)">
+            <a style="color:rgba(255, 255, 255, 0.664)" href="/" data-bs-toggle="modal" data-bs-target="#addI">+Add
+                New Record</a>
+            <br><br><br><br>
+            <table id="item" style="width: 95%; color:rgb(151, 150, 150)">
+
+            </table>
+            <script>
+                var mydata;
+                var id, quant, pri, ammou;
+                $(document).ready(function () {
+                    $.ajax
+                        ({ 
+                            type: "GET", url: "/getItem",
+                            success: function (result) {
+                                myData = result
+                                if (myData != null || myData != "") {
+                                    function createBtn() {
+                                        return '<button id="edit" class="btn fa fa-edit editing" data-bs-toggle="modal" data-bs-target="#UpItem" ></button> <button id="del" class="btn fa fa-trash deleting"></button>'
+                                    }
+                                    table = $('#item').DataTable
+                                        ({
+                                            data: myData, destroy: true,
+                                            columnDefs:
+                                                [{
+                                                    "targets": -1, "data": null,
+                                                    "defaultContent": createBtn()
+                                                }],
+                                            columns: [
+                                                { title: "Item ID" }, { title: "Item Name" }, { title: "Quantity" }, { title: "Price" }, { title: "Amount" }, { title: "Description" }, { title: "Action" }
+                                                // { title: "Item ID" }, { title: "Item Name" }, { title: "Quantity" }, { title: "Price" }, { title: "Amount" }, { title: "Picture" }, { title: "Description" }, { title: "Action" }
+                                            ]
+                                        });
+                                }
+                            }
+                        });
+                    $('#item').on('click', 'button.editing', function () {
+                        var closestRow = $(this).closest('tr');
+                        var arr = table.row(closestRow).data();
+                        id = arr[0]
+                    });
+                    $('#item').on('click', 'button.deleting', function () {
+                        var closestRow = $(this).closest('tr');
+                        var arr = table.row(closestRow).data();
+                        id = arr[0]
+                        $.ajax({
+                            url: "/deleteitem",
+                            type: "POST",
+                            data: { "id": id },
+                            success: function () {
+                                window.location='/items';
+                            }
+                        });
+                    });
+                });
+                function updatedDataCall() {
+                    quant = document.getElementById("changedQuantity").value
+                    pri = document.getElementById("changedPrice").value
+                    ammou = document.getElementById("changedAmount").value
+                    $.ajax({
+                        url: "/updateitem",
+                        type: "POST",
+                        data: { "id": id, "quantity": quant, "price": pri, "amount": ammou },
+                        success: function () {
+                            window.location='/items';
+                        }
+                    });
+                }
+            </script>
+        </div>
+    </div>
+    <div class="modal fade" id="addI" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/additem" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name"
+                                required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Category Name: </label>
+                            <select name="catname" id="catname">
+                                {% for item in List %}
+                                <option value="{{item}}">{{item}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity"
+                                placeholder="Quantity" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input type="numbers" class="form-control" id="price" name="price" placeholder="Price"
+                                required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Amount</label>
+                            <input type="text" class="form-control" id="amount" name="amount" placeholder="Amount"
+                                required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Picture</label>
+                            <input type="file" id="Picture" name="filename" accept="image/*" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <input style="height:50" type="text" class="form-control" id="description"
+                                name="description" placeholder="Description" required />
+                        </div>
+                        <div class="modal-footer d-block">
+                            <button type="submit" class="btn btn-warning float-end" onclick="window.location='/items'">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="UpItem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="changedQuantity" name="quantity"
+                                placeholder="Quantity" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input type="numbers" class="form-control" id="changedPrice" name="price"
+                                placeholder="Price" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Amount</label>
+                            <input type="text" class="form-control" id="changedAmount" name="amount"
+                                placeholder="Amount" required />
+                        </div>
+                        <div class="modal-footer d-block">
+                            <button type="submit" class="btn btn-warning float-end"
+                                onclick='updatedDataCall();'>Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let error_ = '{{ error }}';
+        let msj_ = '{{ errormsg }}';
+        if (error_ == "True") { alert(msj_); }    	 
+    </script>
+</body>
+
+</html>

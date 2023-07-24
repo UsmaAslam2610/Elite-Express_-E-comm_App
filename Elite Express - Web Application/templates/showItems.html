@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELITE EXPRESS - Online Grocery Store| Home</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{{url_for('static',filename='css/style.css')}}" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+</head>
+
+<body style="background-color: aliceblue;">
+    <!-- header  -->
+    <nav class="navbar navbar-expand-lg navbar-light ">
+        <div class="container-fluid">
+            <div class="col-md-3 header navbar-band">
+                <h1><a style="text-decoration:none" href="/"><span id="elite_logo">ELITE</span>EXPRESS</a></h1>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <form class="d-flex">
+                    <input id="search" class="form-control" type="search" placeholder="Search Items"
+                        aria-label="Search">
+                    <button id="btn" class="btn" type="submit"><i class="fa fa-search"
+                            aria-hidden="true"></i></button></button>
+                </form>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin-top: 15px;">
+                    <li class="nav-item">
+                        <a id="home" class="nav-link active" aria-current="page" href="/"
+                            style="color:rgb(26, 23, 218)">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="about" class="nav-link active" aria-current="page" href="/about">About
+                            Us</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a id="category" class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">Categories </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for i in range(0,List|length) %}
+                            <li class="dropdown-submenu">
+                                <button class="btn" onclick="window.location='/showItems'">{{List[i]}}</button>
+                                {% if List1[i]|length > 0 %}
+                                <ul class="dropdown-menu">
+                                    {% for items1 in List1[i] %}
+                                    <li><button class="btn" onclick="window.location='/showItems'"
+                                            id='{{items1}}'>{{items1}}</button></li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a id="profile" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Profile</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/" data-bs-toggle="modal"
+                                    data-bs-target="#loginForm">Login</a></li>
+                            <li><a class="dropdown-item" href="/" data-bs-toggle="modal"
+                                    data-bs-target="#signUpForm">Sign up</a></li>
+                            <li><a class="dropdown-item" href="/logOutCust">Logout</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <button id="menu-toggle" href="#" class="btn btn-primary btn-lg toggle fa fa-shopping-cart"
+                            data-bs-toggle="modal" data-bs-target="#cartshow"></i></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </nav>
+    <!-- Main div -->
+    <div class="wrapper d-flex " style="display:inline;">
+        <!-- Side bar -->
+        <div class="container-fluid col-2 m-2 d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+            style="background-color: rgb(236, 236, 236);">
+            <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <span class="fs-5 d-none d-sm-inline"
+                    style="color: black; font-weight: 500; font-family: georgia,garamond,serif;">Category</span>
+            </a>
+            <ul id="side" style="list-style: none">
+                {% for i in range(0,List|length) %}
+                <li class="dropdown-submenu">
+                    <button class="btn" onclick="window.location='/'" style="color:rgb(0, 0, 0)">{{List[i]}}</button>
+                    {% if List1[i]|length > 0 %}
+                    <ul class="dropdown-menu">
+                        {% for items1 in List1[i] %}
+                        <li><button class="btn" onclick="window.location='/showItems'"
+                                id='{{items1}}'>{{items1}}</button></li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- Right side -->
+        <div class="container adjust-items-center" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;"
+            id="board">
+            {% for product in products %}
+            <div class="product-item m-2">
+                <form method="post" action="/add">
+                    <div class="product-image"><img style=" width:60% ;height:80% ;" src="{{ product.Picture}}">
+                    </div>
+                    <div class="product-tile-footer">
+                        <div class="product-title">{{ product.Name }}</div>
+                        <div class="product-price">Rs.{{ product.Price }}</div>
+                        <div class="cart-action">
+                            <input type="hidden" name="code" value="{{ product.ItemID }}" />
+                            <input style=" margin: 2%; width: 55%;" type="number" id ="qty" class="product-quantity" value="1" min="1" max = '+data[i][2]+'  name="quantity"/>
+                            <input type="submit" value="Add to Cart" class="btnAddAction" />
+                        </div>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+    <!-- login -->
+    <!-- Modal -->
+    <div class="modal fade" id="loginForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Login Now</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/loginCus" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="LogInemail" name="email" placeholder="Email" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="LogInpassword" name="password"
+                                placeholder="Password" />
+                        </div>
+                        <div class="modal-footer d-block">
+                            <p class="float-start">Not yet account <a href="#" data-bs-toggle="modal"
+                                    data-bs-target="#signUpForm">Sign Up</a></p>
+                            <button type="submit" class="btn btn-warning float-end">Log In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //login -->
+    <!--signup -->
+    <!-- Model1 -->
+    <div class="modal fade" id="signUpForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Sign Up Now</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/signupCus" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                placeholder="Username" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                placeholder="Enter Email" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Password" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control" id="Address" name="Address" placeholder="Address" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control" id="City" name="City" placeholder="City" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">ZipCode</label>
+                            <input type="text" class="form-control" id="ZipCode" name="ZipCode" placeholder="ZipCode" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Country</label>
+                            <input type="text" class="form-control" id="Country" name="Country" placeholder="Country" />
+                        </div>
+                        <div class="modal-footer d-block">
+                            <button type="submit" class="btn btn-warning float-end">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let error_ = '{{ error }}';
+        let msj_ = '{{ errormsg }}';
+        console.log(error_, msj_)
+        if (error_ == "True") { alert(msj_); }    	 
+    </script>
+    <!-- <script>
+        $(document).ready(function () {
+        
+        var addInput = '#qty'; 
+        var n = 0; 
+        $(addInput).val(n);
+        $('#plus').on('click', function(){
+            $(addInput).val(++n);
+        })
+
+        $('#min').on('click', function(){
+            if (n >= 1) {
+            $(addInput).val(--n);
+            } else {
+                //do nothing :) exception aa jani
+            }
+        });
+        });
+            $.ajax({
+                url: "/showAll",
+                type: "GET",
+                
+                success: function (result) {
+                    $("#board").html('');
+                    var divContent = '';
+                    var amount=0;
+                    var size = result.length;
+                    data = result
+                    for (var i = 0; i <size; ++i) {
+                      amount = data[i][2];
+                       divContent +=  '<div style="color-border:red;width:230px;height:430px; margin-top:10px; padding:2px; border-width: 2px; border-style: solid;"><div id ="pic" style="border-width: 2px; border-style: solid; margin:10px"><img style=" height: 100%;width:100%" src = '+data[i][5]+'></img></div><p id="desc" rows="3" cols="12" readonly  style="width:88%;  resize: none;margin:10px;" type="text" name="description"><b>'+data[i][1]+'</b><br> '+data[i][4]+'<br>Price: '+data[i][3]+'Rs.</p><div style="margin-top: 2px;"><button  id = "plus"  class="btn btn-outline-secondary" type="button" style="margin-left:8px; "><b>+</b></button><input style=" margin: 2%; width: 55%;"type="number" id ="qty" class="input" value="0" min="1" max = '+data[i][2]+' /><button type="button" id ="min" class="btn btn-outline-secondary" ><b>-</b></button> <button style="margin-top:10px;margin-left: 23px; margin-bottom: 15px;width: 80%; height: 40px" type="button" class="btn btn-dark">Add to cart</button></div></div>';
+                    }
+                    $("#board").append(divContent);
+                    $("[type='number']").keypress(function (evt) {
+                    evt.preventDefault();
+                    });
+            $(".btn").on("click", function() 
+            {
+                var $button = $(this);
+                var $parent = $button.parent(); 
+                var oldValue = $parent.find('.input').val();
+
+                if ($button.text() == "+" && oldValue<=amount) 
+                {
+                    var newVal = parseFloat(oldValue) + 1;
+                } 
+                else 
+                {
+                    if (oldValue > 1) 
+                    {
+                        var newVal = parseFloat(oldValue) - 1;
+                    } 
+                    else 
+                    {
+                    newVal = 1;
+                    }
+                }
+                // $parent.find('a.add-to-cart').attr('data-quantity', newVal);
+                $parent.find('.input').val(newVal);
+            });
+                   
+                }
+            });
+          
+    </script> -->
+    <div class="modal fade" id="cartshow" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 900px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="shopping-cart">
+                        <div class="txt-heading">Shopping Cart</div>
+                        {% if 'cart_item' in session %}
+                        <a id="btnEmpty" class="btn btn-outline-danger" href="{{ url_for('.empty_cart') }}">Empty Cart</a>
+                        <table class="tbl-cart" cellpadding="10" cellspacing="1">
+                            <tbody>
+                                <tr>
+                                    <th style="text-align:left;">Name</th>
+                                    <th style="text-align:left;">Code</th>
+                                    <th style="text-align:right;" width="5%">Quantity</th>
+                                    <th style="text-align:right;" width="10%">Unit Price</th>
+                                    <th style="text-align:right;" width="10%">Price</th>
+                                    <th style="text-align:center;" width="5%">Remove</th>
+                                </tr>
+                                {% for key, val in session['cart_item'].items() %}
+                                {% set quantity = session['cart_item'][key]['Quantity'] %}
+                                {% set price = session['cart_item'][key]['Price'] %}
+                                {% set item_price = session['cart_item'][key]['Total_price'] %}
+                                <tr>
+                                    <script>console.log("{{session['cart_item'][key]['Picture']}}")
+                                        console.log("{{key}}")
+                                    </script>
+                                    <td><img class="cart-item-image" style="width:6%; height:6%"
+                                            src="{{ session['cart_item'][key]['Picture']}}" />{{
+                                        session['cart_item'][key]['Name'] }}</td>
+                                    <td>{{ session['cart_item'][key]['ItemID'] }}</td>
+                                    <td style="text-align:right;">{{ quantity }}</td>
+                                    <td style="text-align:right;">Rs. {{ price }}</td>
+                                    <td style="text-align:right;">Rs. {{ item_price }}</td>
+                                    <td style="text-align:center;">
+                                        <a href="{{ url_for('.delete_product', code=session['cart_item'][key]['ItemID']) }}"
+                                            class="btnRemoveAction">
+                                            <img src="/static/images/icon-delete.png" alt="Remove Item" />
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="2" align="right">Total:</td>
+                                    <td align="right">{{ session['all_total_quantity'] }}</td>
+                                    <td align="right" colspan="2"><strong>Rs. {{ session['all_total_price'] }}</strong>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {% else: %}
+                        <div class="no-records">Your Cart is Empty</div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <a href="#" class="btn btn-outline-primary checkout m-3" data-bs-toggle="modal" data-bs-target="#checkout">Checkout</a>                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let error_ = '{{ error }}';
+        let msj_ = '{{ errormsg }}';
+        console.log(error_, msj_)
+        if (error_ == "True") { alert(msj_); }    	 
+    </script>
+     <div class="modal fade" id="checkout" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 900px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if 'cart_item' in session %}
+                    <form action="/placeOrder" method="post">
+                        {% for key, val in session['cart_item'].items() %}
+                        {% set quantity = session['cart_item'][key]['Quantity'] %}
+                        {% set price = session['cart_item'][key]['Price'] %}
+                        {% set item_price = session['cart_item'][key]['Total_price'] %}
+                        <div>
+                            <label class="form-label">Name</label>
+                            <input type="text" value="{{ session['cart_item'][key]['Name'] }}" readonly>
+
+                            <label class="form-label">Code</label>
+                            <input type="text" value="{{ session['cart_item'][key]['ItemID'] }}" readonly>
+
+                            <label class="form-label">Quantity</label>
+                            <input type="text" value="{{ quantity }}" readonly>
+
+                            <label class="form-label">Unit Price</label>
+                            <input type="text" value="Rs. {{ price }}" readonly>
+
+                            <label class="form-label">Price</label>
+                            <input type="text" value="Rs. {{ item_price }}" readonly>
+                        </div>
+                        {% endfor %}
+                        <div>
+                            <button type ="submit" class="btn btn-outline-primary checkout m-3">Place Order</button>
+                    </div>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+h1 a{
+    font-weight: 300;
+    color:  rgb(212, 207, 207);
+    font-weight: bold;}
+h1 a:hover {
+    text-decoration:none;
+    font-weight: 300;
+    color:  rgb(212, 207, 207);
+    font-weight: bold;
+	position:relative;}
+#elite_logo{
+    background: rgb(0, 0, 0);
+    padding: 0 17px;
+    font-weight: bold;
+    color:  rgb(212, 207, 207);}
+
+#item,#cat,#order{
+    width:200px;
+    height:200px;
+    background-color: rgb(27, 38, 49);
+    color: rgb(204, 199, 199);
+    font-family:'Times New Roman';
+    font-size:larger;
+    border-color: black;
+    border-width: 5px;
+}
+#sidebar {
+    min-width: 300px;
+    max-width: 300px;
+    height: 515px;
+    background: rgb(27, 38, 49);
+    color: #fff;
+    font-family:garamond;
+    font-size:larger;
+    position: relative; }
+    #sidebar .h6 {
+    color: #fff; }
+    #sidebar.active {
+    margin-left: -300px; }
+    #sidebar.active .custom-menu {
+    margin-right: -50px; }
+    #sidebar ul.components {
+    padding: 0; }
+    #sidebar ul li {
+    font-size: 16px;}
+    #sidebar ul li > ul {
+    margin-left: 10px;}
+    #sidebar ul li > ul li {
+        font-size: 14px;}
+    #sidebar ul li a {
+    padding: 15px 30px;
+    display: block;
+    color: rgb(212, 207, 207);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);}
+#sec{
+    margin-left: 55px;
+    margin-top:150px;
+}
